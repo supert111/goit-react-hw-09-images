@@ -1,24 +1,26 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState } from 'react';
 import styles from './Searchbar.module.css';
 
-class Searchbar extends Component {
-    state = { query: '' };
+export default function Searchbar ({ onSubmit }) {
+    const [query, setQuery] = useState('');
 
-    handleChange = element => {
-        this.setState({ query: element.currentTarget.value });
+
+    const handleChange = element => {
+        setQuery(element.currentTarget.value)
+        //this.setState({ query: element.currentTarget.value });
     };
 
-    handleSubmit = element => {
+    const handleSubmit = element => {
         element.preventDefault();
-        this.props.onSubmit(this.state.query);
-        this.setState({ query: '' });
+        onSubmit(query);
+        // this.props.onSubmit(this.state.query);
+        setQuery('');
     };
 
-    render () {
         return (
             <header className={styles.Searchbar}>
-                <form onSubmit={this.handleSubmit} className={styles.SearchForm}>
+                <form onSubmit={handleSubmit} className={styles.SearchForm}>
                     <button type="submit" className={styles.SearchForm_button}>
                         <span className={styles.SearchForm_button_label}>Search</span>
                     </button>
@@ -26,8 +28,8 @@ class Searchbar extends Component {
                     <input
                         className={styles.SearchForm_input}
                         type="text"
-                        value={this.state.query}
-                        onChange ={this.handleChange}
+                        value={query}
+                        onChange ={handleChange}
                         autoComplete="off"
                         autoFocus
                         placeholder="Search images and photos"
@@ -36,10 +38,7 @@ class Searchbar extends Component {
             </header>
         )
     }
-}
 
 Searchbar.propTypes = {
     onSubmit: PropTypes.func.isRequired,
 }
-
-export default Searchbar;

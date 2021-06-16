@@ -1,48 +1,51 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 
  const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-    componentDidMount() {
-        window.addEventListener('keydown', this.handleKeyDown);
-    }
+ export default function Modal ({children, onClose}) {
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    })
+    // componentDidMount() {
+    //     window.addEventListener('keydown', this.handleKeyDown);
+    // }
 
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeyDown);
-    }
+    // componentWillUnmount() {
+    //     window.removeEventListener('keydown', this.handleKeyDown);
+    // }
 
-    handleKeyDown = e => {
+    const handleKeyDown = e => {
         if(e.code === 'Escape') {
-            this.props.onClose();
+            onClose();
         }
     }
 
-    handleBackdropClick = e => {
+    const handleBackdropClick = e => {
         if(e.currentTarget === e.target) {
-            this.props.onClose();
+            onClose();
         }
     }
 
-    render() {
+
         return createPortal (
-            <div className={styles.Overlay} onClick={this.handleBackdropClick}>
+            <div className={styles.Overlay} onClick={handleBackdropClick}>
                 <div className={styles.Modal}>
-                    { this.props.children }
+                    { children }
                 </div>
             </div>,
              modalRoot,
         )
     }
 
-}
 
 Modal.propTypes = {
     onClick: PropTypes.func,
     onClose: PropTypes.func,
     children: PropTypes.node,
 }
-
-export default Modal;
