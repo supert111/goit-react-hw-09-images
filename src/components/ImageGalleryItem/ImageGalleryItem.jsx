@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import styles from './ImageGalleryItem.module.css';
 
 const ImageGalleryitem = ({ hits, onClick }) => {
-console.log(hits)
     return (
         <>
             { hits.map(({ id, webformatURL }) =>  ( 
